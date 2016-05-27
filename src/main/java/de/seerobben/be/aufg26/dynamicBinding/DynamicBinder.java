@@ -1,5 +1,7 @@
 package de.seerobben.be.aufg26.dynamicBinding;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Iterator;
@@ -19,8 +21,8 @@ public class DynamicBinder {
 
 	}
 
-	public boolean executeTarget(Request r) throws KeinDienstException,
-			FehlerImPrologFileException {
+	public boolean executeTarget(Request r)
+			throws KeinDienstException, FehlerImPrologFileException, IOException, PrologException {
 
 		CompoundTerm t = ConditionParser.parse(r.getPostCondition());
 
@@ -43,37 +45,35 @@ public class DynamicBinder {
 		while (!result && iterator.hasNext()) {
 			Method current = iterator.next();
 
-			String prePath = "D:/Informationsinfrastrukturen/GOJA/workspace/BEAufg26/src/main/resources/prolog/";
+			String prePath = "src/main/resources/prolog/";
 			Environment e = new Environment();
-			e.ensureLoaded(AtomTerm.get(prePath + "knowledgeBase.pl"));
-			e.ensureLoaded(AtomTerm.get(prePath
-					+ current.getAnnotation(CapabilityAnnotation.class)
-							.postcondition()));
+			e.ensureLoaded(AtomTerm.get(this.getResource(prePath + "knowledgeBase.pl")));
+			e.ensureLoaded(AtomTerm.get(
+					this.getResource(prePath + current.getAnnotation(CapabilityAnnotation.class).postcondition())));
 
 			Interpreter i = e.createInterpreter();
 			e.runInitialization(i);
 
-			try {
-				switch (i.execute(i.prepareGoal(t))) {
-				case 0:
-					result = true;
-					break;
-				case 1:
-					result = true;
-					break;
-				case -1:
-					result = result || false;
-					break;
-				default:
-					throw new FehlerImPrologFileException(
-							FehlerImPrologFileException.EXCEPTION_MESSAGE);
-				}
-			} catch (PrologException e1) {
-				throw new FehlerImPrologFileException(
-						FehlerImPrologFileException.EXCEPTION_MESSAGE);
-
+			switch (i.execute(i.prepareGoal(t))) {
+			case 0:
+				result = true;
+				break;
+			case 1:
+				result = true;
+				break;
+			case -1:
+				result = result || false;
+				break;
+			default:
+				throw new FehlerImPrologFileException(FehlerImPrologFileException.EXCEPTION_MESSAGE);
 			}
+
 		}
 		return result;
+	}
+
+	private String getResource(String input) throws IOException {
+		File file = new File(input);
+		return file.toURI().toURL().getFile();
 	}
 }

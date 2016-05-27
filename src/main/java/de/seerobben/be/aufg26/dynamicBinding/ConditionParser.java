@@ -14,9 +14,15 @@ public class ConditionParser {
 
 		Vector<CompoundTerm> terms = new Vector<CompoundTerm>();
 		for (String term : request.replace(" ", "").replace("),", ");").split(";")) {
-			CompoundTermTag tt = CompoundTermTag.get(term.substring(0, term.indexOf("(")), countChar(term, ','));
-
 			String substr = term.substring(term.indexOf("(") + 1, term.indexOf(")"));
+			int arity = 0 ;
+			if (!substr.equals("")) {
+				arity = countChar(term, ',')+1;	
+			}
+			
+			CompoundTermTag tt = CompoundTermTag.get(term.substring(0, term.indexOf("(")), arity);
+
+			
 			if (!substr.equals("")) {
 				String[] args = substr.split(",");
 
