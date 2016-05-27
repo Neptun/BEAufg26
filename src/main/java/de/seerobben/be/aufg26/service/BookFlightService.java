@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
-import sun.misc.FpUtils;
 import de.seerobben.be.aufg26.dynamicBinding.DynamicBinder;
 import de.seerobben.be.aufg26.dynamicBinding.Request;
 
@@ -27,7 +26,7 @@ public class BookFlightService implements JavaDelegate {
 		l.info("");
 		
 		Request request = new Request(from, to, postCondition);
-		String result = binder.executeTarget(request);
+		boolean result = binder.executeTarget(request);
 		
 		execution.setVariable("result", result);
 	}
