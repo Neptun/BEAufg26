@@ -1,20 +1,20 @@
 package de.seerobben.be.aufg26.dynamicBinding;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Vector;
-
-import de.seerobben.be.aufg26.dynamicBinding.directory.CapabilityAnnotation;
-import de.seerobben.be.aufg26.dynamicBinding.directory.Directory.DynamicBindingTravels;
 import gnu.prolog.term.AtomTerm;
 import gnu.prolog.term.CompoundTerm;
 import gnu.prolog.vm.Environment;
 import gnu.prolog.vm.Interpreter;
 import gnu.prolog.vm.PrologException;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Random;
+import java.util.Vector;
+
+import de.seerobben.be.aufg26.dynamicBinding.directory.CapabilityAnnotation;
+import de.seerobben.be.aufg26.dynamicBinding.directory.Directory.DynamicBindingTravels;
 
 public class DynamicBinder {
 
@@ -22,12 +22,12 @@ public class DynamicBinder {
 
 	}
 
-	public String executeTarget(Request r)
-			throws KeinDienstException, FehlerImPrologFileException, IOException, PrologException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public String executeTarget(Request r) throws KeinDienstException, FehlerImPrologFileException, IOException,
+			PrologException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
 		CompoundTerm t = ConditionParser.parse(r.getPostCondition());
 
-		Collection<Method> syntacticalMatches = new Vector<Method>();
+		Vector<Method> syntacticalMatches = new Vector<Method>();
 
 		for (Method method : DynamicBindingTravels.class.getDeclaredMethods()) {
 
@@ -41,11 +41,16 @@ public class DynamicBinder {
 
 		boolean result = false;
 
-		Iterator<Method> iterator = syntacticalMatches.iterator();
-
 		Method match = null;
-		while (!result && iterator.hasNext()) {
-			Method current = iterator.next();
+
+		while (!result && syntacticalMatches.size() > 0) {
+
+			int actualSize = syntacticalMatches.size();
+			Random rand = new Random();
+			int randomInt = rand.nextInt(actualSize);
+
+			Method current = syntacticalMatches.get(randomInt);
+			syntacticalMatches.remove(randomInt);
 
 			String prePath = "src/main/resources/prolog/";
 			Environment e = new Environment();
@@ -74,9 +79,9 @@ public class DynamicBinder {
 
 		}
 		if (result) {
-			return (String) match.invoke(new DynamicBindingTravels(), new Object[]{r.getFrom(), r.getTo()});
+			return (String) match.invoke(new DynamicBindingTravels(), new Object[] { r.getFrom(), r.getTo() });
 		}
-		return result + " - kein Match gefunden.";
+		return result + " - kein Match gefunden";
 	}
 
 	private String getResource(String input) throws IOException {
