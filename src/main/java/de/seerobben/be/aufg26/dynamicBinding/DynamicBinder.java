@@ -2,6 +2,7 @@ package de.seerobben.be.aufg26.dynamicBinding;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Iterator;
@@ -21,8 +22,8 @@ public class DynamicBinder {
 
 	}
 
-	public boolean executeTarget(Request r)
-			throws KeinDienstException, FehlerImPrologFileException, IOException, PrologException {
+	public String executeTarget(Request r)
+			throws KeinDienstException, FehlerImPrologFileException, IOException, PrologException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
 		CompoundTerm t = ConditionParser.parse(r.getPostCondition());
 
@@ -42,6 +43,7 @@ public class DynamicBinder {
 
 		Iterator<Method> iterator = syntacticalMatches.iterator();
 
+		Method match = null;
 		while (!result && iterator.hasNext()) {
 			Method current = iterator.next();
 
@@ -57,9 +59,11 @@ public class DynamicBinder {
 			switch (i.execute(i.prepareGoal(t))) {
 			case 0:
 				result = true;
+				match = current;
 				break;
 			case 1:
 				result = true;
+				match = current;
 				break;
 			case -1:
 				result = result || false;
@@ -69,7 +73,10 @@ public class DynamicBinder {
 			}
 
 		}
-		return result;
+		if (result) {
+			return (String) match.invoke(new DynamicBindingTravels(), new Object[]{r.getFrom(), r.getTo()});
+		}
+		return result + " - kein Match gefunden.";
 	}
 
 	private String getResource(String input) throws IOException {

@@ -26,7 +26,7 @@ public class BookFlightService implements JavaDelegate {
 		l.info("");
 		
 		Request request = new Request(from, to, postCondition);
-		boolean result = binder.executeTarget(request);
+		String result = binder.executeTarget(request);
 		
 		execution.setVariable("result", result);
 	}
