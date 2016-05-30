@@ -7,6 +7,19 @@
 	<packaging>war</packaging>
 	<name>Aufgabe 26</name>
 
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>in-project</id>
+			<name>In Project Repo</name>
+			<url>file://${project.basedir}/lib</url>
+		</repository>
+	</repositories>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -21,6 +34,13 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>gnu</groupId>
+			<artifactId>gnuprologjava</artifactId>
+			<version>0.2.6</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.camunda.bpm</groupId>
 			<artifactId>camunda-engine</artifactId>
 			<scope>provided</scope>
@@ -31,14 +51,6 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.0.1</version>
 			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<artifactId>gnuprologjava</artifactId>
-			<groupId>gnu</groupId>
-			<version>0.2.6</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/gnuprologjava-0.2.6.jar</systemPath>
 		</dependency>
 
 		<dependency>
