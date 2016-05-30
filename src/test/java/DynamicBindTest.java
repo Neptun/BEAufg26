@@ -2,6 +2,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -17,7 +18,7 @@ public class DynamicBindTest {
 
 	@Test
 	public void test() throws KeinDienstException, FehlerImPrologFileException, IOException, PrologException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, URISyntaxException {
 
 		String preString = "Ihre heutige Verbindung von Hannover nach Muenchen als ";
 		String doubleDotBreak = ":\n";

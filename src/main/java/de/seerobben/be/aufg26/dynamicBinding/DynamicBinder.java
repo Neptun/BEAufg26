@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.util.Random;
 import java.util.Vector;
 
@@ -23,7 +24,7 @@ public class DynamicBinder {
 	}
 
 	public String executeTarget(Request r) throws KeinDienstException, FehlerImPrologFileException, IOException,
-			PrologException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+			PrologException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, URISyntaxException {
 
 		CompoundTerm t = ConditionParser.parse(r.getPostCondition());
 
@@ -52,7 +53,7 @@ public class DynamicBinder {
 			Method current = syntacticalMatches.get(randomInt);
 			syntacticalMatches.remove(randomInt);
 
-			String prePath = "src/main/resources/prolog/";
+			String prePath = "/prolog/";
 			Environment e = new Environment();
 			e.ensureLoaded(AtomTerm.get(this.getResource(prePath + "knowledgeBase.pl")));
 			e.ensureLoaded(AtomTerm.get(
@@ -84,8 +85,7 @@ public class DynamicBinder {
 		return result + " - kein Match gefunden";
 	}
 
-	private String getResource(String input) throws IOException {
-		File file = new File(input);
-		return file.toURI().toURL().getFile();
+	private String getResource(String input) throws IOException, URISyntaxException {
+		return DynamicBinder.class.getResource(input).toURI().toURL().getFile();
 	}
 }
