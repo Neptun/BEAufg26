@@ -11,7 +11,7 @@ import gnu.prolog.term.Term;
 public class ConditionParser {
 
 	public static CompoundTerm parse(String request) {
-		if (request.isEmpty()) {
+		if (request.equals("")) {
 			return null;
 		}
 
