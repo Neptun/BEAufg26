@@ -11,18 +11,20 @@ import gnu.prolog.term.Term;
 public class ConditionParser {
 
 	public static CompoundTerm parse(String request) {
+		if (request.isEmpty()) {
+			return null;
+		}
 
 		Vector<CompoundTerm> terms = new Vector<CompoundTerm>();
 		for (String term : request.replace(" ", "").replace("),", ");").split(";")) {
 			String substr = term.substring(term.indexOf("(") + 1, term.indexOf(")"));
-			int arity = 0 ;
+			int arity = 0;
 			if (!substr.equals("")) {
-				arity = countChar(term, ',')+1;	
+				arity = countChar(term, ',') + 1;
 			}
-			
+
 			CompoundTermTag tt = CompoundTermTag.get(term.substring(0, term.indexOf("(")), arity);
 
-			
 			if (!substr.equals("")) {
 				String[] args = substr.split(",");
 
@@ -40,7 +42,7 @@ public class ConditionParser {
 		return conjunctTerms(terms);
 	}
 
-	private static CompoundTerm conjunctTerms(Vector<CompoundTerm> terms) {
+	public static CompoundTerm conjunctTerms(Vector<CompoundTerm> terms) {
 		Iterator<CompoundTerm> iter = terms.iterator();
 		CompoundTerm result = iter.next();
 		while (iter.hasNext()) {

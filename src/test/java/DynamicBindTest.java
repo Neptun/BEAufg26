@@ -70,6 +70,11 @@ public class DynamicBindTest {
 		System.out.println(preString + reiseart + doubleDotBreak + resultR4 + linebreak);
 		assertTrue(possibleMatchForR4.contains(resultR4));
 
+		Request r5 = new Request("Hamburg", "Berlin", "type(result,trainRide)");
+		String resultR5 = binder.executeTarget(r5);
+		System.out.println("Anfrage: Zugfahrt von Hamburg nach Berlin, Antwort: " + resultR5);
+		assertEquals("false - kein Match gefunden", resultR5);
+
 	}
 
 }

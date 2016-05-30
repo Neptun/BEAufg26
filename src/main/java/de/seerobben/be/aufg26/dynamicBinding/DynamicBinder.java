@@ -27,6 +27,15 @@ public class DynamicBinder {
 
 		CompoundTerm t = ConditionParser.parse(r.getPostCondition());
 
+		Vector<CompoundTerm> terms = new Vector<CompoundTerm>();
+		if (t != null) {
+			terms.add(t);
+		}
+		terms.add(ConditionParser.parse("formalParameterValue(from, " + r.getFrom() + ")"));
+		terms.add(ConditionParser.parse("formalParameterValue(to, " + r.getTo() + ")"));
+
+		t = ConditionParser.conjunctTerms(terms);
+
 		Vector<Method> syntacticalMatches = new Vector<Method>();
 
 		for (Method method : DynamicBindingTravels.class.getDeclaredMethods()) {
