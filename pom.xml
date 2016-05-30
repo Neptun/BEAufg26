@@ -65,7 +65,7 @@
 			<groupId>gnu</groupId>
 			<version>0.2.6</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/gnuprologjava-0.2.6.jar</systemPath>
+			<systemPath>${basedir}/lib/gnu/gnuprologjava/0.2.6/gnuprologjava-0.2.6.jar</systemPath>
 		</dependency>
 	</dependencies>
 
