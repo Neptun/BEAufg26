@@ -27,6 +27,9 @@ public class DynamicBindTest {
 		Request r3 = new Request("Hannover", "Muenchen", "type(result,trip)");
 		assertEquals("LH201 from Hannover to Muenchen", binder.executeTarget(r3));
 
+		Request r4 = new Request("Hannover", "Muenchen", "type(result,trainRide)");
+		assertEquals("ICE508 from Hannover to Muenchen", binder.executeTarget(r4));
+
 	}
 
 }
